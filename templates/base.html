@@ -1,15 +1,19 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title_html %}{% endblock %}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
+    <div class="container">
     <h1>
         Tasks Manager - {% block h1 %}{% endblock %}
     </h1>
     <article>
         {% block article_content %}{% endblock %}
     </article>
+    </div>
 </body>
 </html>
