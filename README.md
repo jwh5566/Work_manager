@@ -1,7 +1,7 @@
 # Work_manager
 Django Web Development with Python
 
-这个项目主要是用来学习Django，内容涉及Template，Model，Queryset，Forms,CBV,Sessions,Auth,Ajax等等
+这个项目主要是用来学习Django，内容涉及Template，Model，Queryset，Forms, CBV, Sessions, Auth, Ajax等等
 
 ## 预览图
 
