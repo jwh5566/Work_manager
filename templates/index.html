@@ -14,13 +14,19 @@
     <a href="{% url 'create_supervisor' %}">Create A Supervisor(Django ModelForm)</a><br>
     <hr>
     <h2>based on CBV</h2>
-    <div>
-    <a href="{% url 'create_project' %}">Create A Project(CreateView)</a>
-    <a href="{% url 'create_task' %}">Create A Task(CreateView)</a>
-    <a href="{% url 'project_list' %}">Project List(ListView)</a>
-    <a href="{% url 'project_list2' %}">Project List(ListView,自定义(带分页))</a>
-    <a href="{% url 'developer_list' %}">Developer List(ListView)</a>
-    </div>
+    <table class="table">
+    <tbody>
+        <tr><td><a href="{% url 'create_project' %}">Create A Project(CreateView)</a></td>
+        <td><a href="{% url 'create_task' %}">Create A Task(CreateView)</a></td>
+        <td><a href="{% url 'project_list' %}">Project List(ListView)</a></td>
+    </tr>
+        <td>
+        <a href="{% url 'project_list2' %}">Project List(ListView,自定义(带分页))</a></td>
+        <td>
+            <a href="{% url 'developer_list' %}">Developer List(ListView)</a></td>
+    </tr>
+    </tbody>
+    </table>
     <h3>{{ action }}</h3>
     {% if all_projects|length > 0 %}
         <table class="table table-striped">
