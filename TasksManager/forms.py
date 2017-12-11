@@ -1,10 +1,16 @@
 from django import forms
-from .models import Supervisor, Developer
+from .models import Supervisor, Developer, Task
 
 error_name = {
     'required': 'you must type a name!',
     'invalid': 'Wrong format.'
 }
+
+
+class Form_task_time(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['time_elapsed']
 
 
 class Form_project_create(forms.Form):

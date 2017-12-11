@@ -43,9 +43,15 @@ class Developer(UserProfile):
 class Task(models.Model):
     title = models.CharField(max_length=50, verbose_name="Title")
     description = models.CharField(max_length=1000, verbose_name="Description")
-    time_elapsed = models.IntegerField(verbose_name="Elapsed time", null=True, default=None, blank=True)
+    time_elapsed = models.IntegerField(verbose_name="Elapsed time(days)", null=True, default=None, blank=True)
     importance = models.IntegerField(verbose_name="Importance")
-    project = models.ForeignKey(Project, verbose_name="Project", null=True, default=None, blank=True)
-    developer = models.ForeignKey(Developer, verbose_name="User")
+    project = models.ForeignKey(Project, verbose_name="Project", null=True, default=None, blank=True, related_name='tasks')
+    developer = models.ForeignKey(Developer, verbose_name="User", related_name='developers')
 
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "task"
+        verbose_name_plural = "tasks"
 

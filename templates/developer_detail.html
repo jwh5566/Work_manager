@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block h1 %}
+    Developer Detail
+{% endblock %}
+
+{% block article_content %}
+    <h3>{{ object.name }}</h3>
+    <span>Login : {{ object.login }}</span><br />
+    <span>Email : {{ object.email }}</span>
+    <h3>Tasks</h3>
+{#    {% for task in tasks %}#}
+{#        {{ task.title }}#}
+{#    {% endfor %}#}
+    <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td><strong>Title</strong></td>
+                    <td><strong>Importance</strong></td>
+                    <td><strong>Project</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks_dev %}
+                <tr>
+                    <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
+                    <td>{{ task.importance }}</td>
+                    <td>{{ task.project }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}
