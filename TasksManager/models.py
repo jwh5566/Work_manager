@@ -25,6 +25,9 @@ class Project(models.Model):
     description = models.CharField(max_length=1000, verbose_name="Description")
     client_name = models.CharField(max_length=1000, verbose_name="Client name")
 
+    def __str__(self):
+        return self.title
+
 
 class Supervisor(UserProfile):
     specialisation = models.CharField(max_length=50, verbose_name="Specialisation")

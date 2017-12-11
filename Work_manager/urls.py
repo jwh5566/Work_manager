@@ -20,4 +20,11 @@ urlpatterns = [
     url(r'^$', 'TasksManager.views.page', name="public_index"),
     url(r'^index$', 'TasksManager.views.page'),
     url(r'^connection$', 'TasksManager.views.connection_page', name="public_connection"),
+
+    url(r'^project-detail-(?P<pk>\d+)$', 'TasksManager.views.project_detail', name="project_detail"),
+
+    url(r'^create-developer$', 'TasksManager.views.create_developer', name="create_developer"),
+    url(r'^add-developer$', 'TasksManager.views.create_developer2', name="add_developer"),
+    url(r'^create-supervisor$', 'TasksManager.views.create_supervisor', name="create_supervisor"),
+    url(r'^create-project$', 'TasksManager.views.create_project', name="create_project"),
 ]

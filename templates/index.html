@@ -1,15 +1,37 @@
 {% extends "base.html" %}
 
-
 {% block title_html %}
-    Hello World Title
+    Projects list
 {% endblock %}
 
 {% block h1 %}
-    {{ block.super }}Hello World Django
+    Projects list
 {% endblock %}
 
 {% block article_content %}
-    Hello world!<br>
-    <button class="btn btn-default" type="submit">Button</button>
+    <a href="{% url 'create_developer' %}">Create A Developer(原生Form)</a><br>
+    <a href="{% url 'add_developer' %}">Create A Developer(Django Form)</a><br>
+    <a href="{% url 'create_supervisor' %}">Create A Supervisor(Django ModelForm)</a><br>
+    <a href="{% url 'create_project' %}">Create A Project(Django Form)</a>
+    <h3>{{ action }}</h3>
+    {% if all_projects|length > 0 %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Title</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for project in all_projects %}
+                <tr>
+                    <td>{{ project.id }}</td>
+                    <td><a href="{% url 'project_detail' project.id %}">{{ project.title }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <span>No project.</span>
+    {% endif %}
 {% endblock %}
