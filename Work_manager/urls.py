@@ -14,6 +14,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from TasksManager.models import Project, Task, Developer
+from django.views.generic import CreateView, ListView
+from TasksManager.views import Project_list
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -26,5 +30,18 @@ urlpatterns = [
     url(r'^create-developer$', 'TasksManager.views.create_developer', name="create_developer"),
     url(r'^add-developer$', 'TasksManager.views.create_developer2', name="add_developer"),
     url(r'^create-supervisor$', 'TasksManager.views.create_supervisor', name="create_supervisor"),
-    url(r'^create-project$', 'TasksManager.views.create_project', name="create_project"),
+    # url(r'^create-project$', 'TasksManager.views.create_project', name="create_project"),
+
+
+    # based on  CBV
+    url(r'^create-project$', CreateView.as_view(model=Project, template_name='create_project.html',
+                                               success_url='index', fields='__all__'), name="create_project"),
+    url(r'^create-task$', CreateView.as_view(model=Task, template_name='create_task.html',
+                                             success_url='index', fields='__all__'), name='create_task'),
+    url(r'^project_list$', ListView.as_view(model=Project, template_name='project_list.html'), name='project_list'),
+    url(r'^developer_list$', ListView.as_view(model=Developer, template_name='developer_list.html'),
+        name='developer_list'),
+
+    # custom CBV
+    url(r'^project_list2$', Project_list.as_view(), name='project_list2'),
 ]

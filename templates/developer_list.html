@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title_html %}
+    Developer List
+{% endblock %}
+
+{% block h1 %}
+    Developer List
+{% endblock %}
+
+{% block  article_content%}
+    <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td><strong>Name</strong></td>
+                    <td><strong>Login</strong></td>
+                    <td><strong>Supervisor</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for dev in object_list %}
+                <tr>
+                    <td><a href="#">{{ dev.name }}</a></td>
+                    <td>{{ dev.login }}</td>
+                    <td>{{ dev.supervisor }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

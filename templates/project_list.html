@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title_html %}
+    Project List
+{% endblock %}
+
+{% block h1 %}
+    Project List
+{% endblock %}
+
+{% block  article_content%}
+    <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td><strong>Title</strong></td>
+                    <td><strong>Description</strong></td>
+                    <td><strong>Client name</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for project in object_list %}
+                <tr>
+                    <td><a href="{% url 'project_detail' project.id %}">{{ project.title }}</a></td>
+                    <td>{{ project.description }}</td>
+                    <td>{{ project.client_name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

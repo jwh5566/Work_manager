@@ -12,14 +12,23 @@
     <a href="{% url 'create_developer' %}">Create A Developer(原生Form)</a><br>
     <a href="{% url 'add_developer' %}">Create A Developer(Django Form)</a><br>
     <a href="{% url 'create_supervisor' %}">Create A Supervisor(Django ModelForm)</a><br>
-    <a href="{% url 'create_project' %}">Create A Project(Django Form)</a>
+    <hr>
+    <h2>based on CBV</h2>
+    <div>
+    <a href="{% url 'create_project' %}">Create A Project(CreateView)</a>
+    <a href="{% url 'create_task' %}">Create A Task(CreateView)</a>
+    <a href="{% url 'project_list' %}">Project List(ListView)</a>
+    <a href="{% url 'project_list2' %}">Project List(ListView,自定义(带分页))</a>
+    <a href="{% url 'developer_list' %}">Developer List(ListView)</a>
+    </div>
     <h3>{{ action }}</h3>
     {% if all_projects|length > 0 %}
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <td>ID</td>
-                    <td>Title</td>
+                    <td><strong>ID</strong></td>
+                    <td><strong>Title</strong></td>
+                    <td><strong>Description</strong></td>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +36,7 @@
                 <tr>
                     <td>{{ project.id }}</td>
                     <td><a href="{% url 'project_detail' project.id %}">{{ project.title }}</a></td>
+                    <td>{{ project.description }}</td>
                 </tr>
             {% endfor %}
             </tbody>

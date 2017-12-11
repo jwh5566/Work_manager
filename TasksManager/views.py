@@ -3,6 +3,7 @@ from .models import Project, Developer, Supervisor
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import Form_inscription, Form_supervisor, Form_project_create
 from django.core.urlresolvers import reverse
+from django.views.generic import ListView
 
 
 def page(request):
@@ -86,6 +87,16 @@ def create_developer2(request):
     else:
         form = Form_inscription(initial={'name': 'new', 'supervisor': Supervisor.objects.all().first()})
     return render(request, 'create_developer2.html', {'form': form})
+
+
+class Project_list(ListView):
+    model = Project
+    template_name = 'project_list2.html'
+    paginate_by = 2
+
+    def get_queryset(self):
+        queryset = Project.objects.all().order_by('title')
+        return queryset
 
 
 def create_supervisor(request):
