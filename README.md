@@ -5,6 +5,9 @@ Django Web Development with Python
 
 ## 预览图
 
+### 登录
+![主页](https://github.com/jwh5566/Work_manager/blob/master/static/images/login.jpg)
+
 ### 首页
 ![主页](https://github.com/jwh5566/Work_manager/blob/master/static/images/index.jpg)
 
@@ -13,3 +16,6 @@ Django Web Development with Python
 
 ### 通用类视图
 ![主页](https://github.com/jwh5566/Work_manager/blob/master/static/images/cbv.jpg)
+
+### ListView
+![主页](https://github.com/jwh5566/Work_manager/blob/master/static/images/listview.jpg)
