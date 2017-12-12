@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block article_content %}
-    <h3>{{ object.name }}</h3>
-    <span>Login : {{ object.login }}</span><br />
-    <span>Email : {{ object.email }}</span>
+    <h3>{{ object.user_auth.last_name }}</h3>
+    <span>Login : {{ object.user_auth.username }}</span><br />
+    <span>Email : {{ object.user_auth.email }}</span>
     <h3>Tasks</h3>
 {#    {% for task in tasks %}#}
 {#        {{ task.title }}#}

@@ -23,9 +23,9 @@
         <tbody>
         {% for task in tasks %}
             <tr>
-                <td><a href="">{{ task.title }}</a></td>
+                <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
                 <td>{{ task.description }}</td>
-                <td><a href="{% url 'developer_detail' task.developer.id %}">{{ task.developer }}</a></td>
+                <td><a href="{% url 'developer_detail' task.developer.user_auth.id %}">{{ task.developer }}</a></td>
             </tr>
         {% endfor %}
         </tbody>

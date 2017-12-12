@@ -1,14 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Connection Title</title>
-</head>
-<body>
-    <h1>
-        Connection Django
-    </h1>
-    <article>
-    </article>
-</body>
-</html>
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block h1 %}
+    Login
+{% endblock %}
+
+{% block article_content %}
+    {% if user.is_authenticated %}
+        <h1>You are connected.</h1>
+        <p>
+            Your email : {{ user.email }}
+        </p>
+        <h4><a href="{% url 'public_index' %}">index</a></h4>
+    {% else %}
+        <div class="col-md-3">
+        <form method="post" action="{% url 'connection' %}">
+            {% csrf_token %}
+            {% for field in form.visible_fields %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+            <input type="submit" class="btn btn-primary" value="Login">
+        </form>
+    {% endif %}
+    </div>
+{% endblock %}

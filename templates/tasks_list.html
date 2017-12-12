@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title_html %}
+    Tasks List
+{% endblock %}
+
+{% block h1 %}
+    Tasks List
+{% endblock %}
+
+{% block  article_content%}
+    <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td><strong>Title</strong></td>
+                    <td><strong>Description</strong></td>
+                    <td><a href="{% url 'create_task' %}"><button class="btn btn-primary">Create Task</button></a></td>
+                </tr>
+            </thead>
+            <tbody>
+            {% if last_task %}
+                <tr class="important">
+                    <td><a href="{% url 'task_detail' last_task.id %}">{{ last_task.title }}</a></td>
+                    <td>{{ last_task.description }}</td>
+                    <td><a href="{% url 'update_task' last_task.id %}"><button class="btn btn-info">Edit</button></a>
+                    <a href="{% url 'task_delete' last_task.id %}"><button class="btn btn-danger">Delete</button></a></td>
+                </tr>
+            {% endif %}
+            {% for task in tasks_list %}
+                <tr>
+                    <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
+                    <td>{{ task.description }}</td>
+                    <td><a href="{% url 'update_task' task.id %}"><button class="btn btn-info">Edit</button></a>
+                        <a href="{% url 'task_delete' task.id %}"><button class="btn btn-danger">Delete</button></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Project, Developer, Supervisor, Task
-from django.http import HttpResponse, HttpResponseRedirect
-from .forms import Form_inscription, Form_supervisor, Form_project_create, Form_task_time
+from django.http import HttpResponse
+from .forms import Form_inscription, Form_supervisor, Form_project_create, Form_task_time, Form_connection
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 def page(request):
@@ -79,6 +82,7 @@ def create_project(request):
     return render(request, 'create_project.html', {'form': form})
 
 
+@login_required
 def create_developer2(request):
     if request.POST:
         form = Form_inscription(request.POST)
@@ -87,9 +91,14 @@ def create_developer2(request):
             login = form.cleaned_data['login']
             password = form.cleaned_data['password']
             supervisor = form.cleaned_data['supervisor']
-            new_developer = Developer(name=name, login=login, password=password,
-                                      email="",
-                                      supervisor=supervisor)
+            # new_developer = Developer(name=name, login=login, password=password,
+            #                           email="",
+            #                           supervisor=supervisor)
+            new_user = User.objects.create_user(username=login, password=password)
+            new_user.last_name = name
+            new_user.is_active = True
+            new_user.save()
+            new_developer = Developer(user_auth=new_user, supervisor=supervisor)
             new_developer.save()
             return HttpResponse("Developer added")
         else:
@@ -133,6 +142,25 @@ class Project_list(ListView):
         return queryset
 
 
+def Task_detail(request, pk):
+    try:
+        task = Task.objects.get(id=pk)
+    except (Task.DoesNotExist, Task.MultipleObjectsReturned):
+        return HttpResponseRedirect(reverse('public_empty'))
+    else:
+        request.session['last_task'] = task.id
+    return render(request, 'task_detail.html', {'object': task})
+
+
+def Task_list(request):
+    tasks_list = Task.objects.all()
+    last_task = 0
+    if 'last_task' in request.session:
+        last_task = Task.objects.get(id=request.session['last_task'])
+        tasks_list = tasks_list.exclude(id=request.session['last_task'])
+    return render(request, 'tasks_list.html', {'tasks_list': tasks_list, 'last_task': last_task})
+
+
 class Task_delete(DeleteView):
     model = Task
     template_name = 'confirm_delete_task.html'
@@ -141,12 +169,59 @@ class Task_delete(DeleteView):
     def get_success_url(self):
         return reverse(self.success_url)
 
+
+def connection(request):
+    if request.POST:
+        form = Form_connection(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                if request.GET.get('next'):
+                    return redirect(request.GET['next'])
+
+        else:
+            return render(request, 'connection.html', {'form': form})
+    else:
+        form = Form_connection()
+    return render(request, 'connection.html', {'form': form})
+
+
+def disconnect(request):
+    logout(request)
+    return render(request, 'disconnect.html')
+
+
+# def create_supervisor(request):
+#     if request.POST:
+#         form = Form_supervisor(request.POST)
+#         if form.is_valid():
+#             form.save(commit=True)
+#             return HttpResponseRedirect(reverse('public_index'))
+#         else:
+#             return render(request, 'create_supervisor.html', {'form': form})
+#     else:
+#         form = Form_supervisor()
+#     return render(request, 'create_supervisor.html', {'form': form})
+
 def create_supervisor(request):
     if request.POST:
         form = Form_supervisor(request.POST)
         if form.is_valid():
-            form.save(commit=True)
-            return HttpResponseRedirect(reverse('public_index'))
+            name = form.cleaned_data['name']
+            login = form.cleaned_data['login']
+            password = form.cleaned_data['password']
+            specialisation = form.cleaned_data['specialisation']
+            email = form.cleaned_data['email']
+            new_user = User.objects.create_user(username=login, password=password, email=email)
+            new_user.last_name = name
+            new_user.is_active = True
+            new_user.save()
+            new_supervisor = Supervisor(user_auth=new_user, specialisation=specialisation)
+            new_supervisor.save()
+            return HttpResponseRedirect(reverse('public_empty'))
         else:
             return render(request, 'create_supervisor.html', {'form': form})
     else:

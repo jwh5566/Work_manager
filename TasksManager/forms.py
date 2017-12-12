@@ -1,5 +1,6 @@
 from django import forms
 from .models import Supervisor, Developer, Task
+from django.contrib.auth import authenticate, login
 
 error_name = {
     'required': 'you must type a name!',
@@ -37,7 +38,38 @@ class Form_inscription(forms.Form):
         return self.cleaned_data
 
 
-class Form_supervisor(forms.ModelForm):
-    class Meta:
-        model = Supervisor
-        exclude = ('date_created', 'last_connection')
+class Form_connection(forms.Form):
+    username = forms.CharField(label='Login')
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super(Form_connection, self).clean()
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        if not authenticate(username=username, password=password):
+            raise forms.ValidationError("Wrong username or password!")
+        return self.cleaned_data
+
+
+# class Form_supervisor(forms.ModelForm):
+#     class Meta:
+#         model = Supervisor
+#         exclude = ('date_created', 'last_connection')
+
+
+class Form_supervisor(forms.Form):
+    name = forms.CharField(label='Name', max_length=30)
+    login = forms.CharField(label='Login')
+    email = forms.EmailField(label='Email')
+    specialisation = forms.CharField(label='Specialisation')
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password_bis = forms.CharField(label='Password', widget=forms.PasswordInput)
+    
+    
+    def clean(self):
+        cleaned_data = super(Form_supervisor, self).clean()
+        password = self.cleaned_data.get('password')
+        password_bis = self.cleaned_data.get('password_bis')
+        if password and password_bis and password != password_bis:
+            raise forms.ValidationError("Passwords are not identical.")
+        return self.cleaned_data
