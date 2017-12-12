@@ -37,6 +37,12 @@
 
         </ul>
         </li>
+
+            {% if request.user.is_authenticated %}
+                <li class="navbar-right"><a href="{% url 'disconnect' %}">logout</a> </li>
+            {% else %}
+                <li class="navbar-right"><a href="{% url 'connection' %}">login</a> </li>
+            {% endif %}
     </ul>
 
 
