@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title_html %}
+    Task Detail
+{% endblock %}
+
+{% block h1 %}
+    {{ object.title }}
+{% endblock %}
+
+{% block  article_content%}
+    <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td><strong>Project</strong></td>
+                    <td><strong>Developer</strong></td>
+                    <td><strong>Importence</strong></td>
+                    <td><strong>Time_elapsed</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ object.project }}</td>
+                    <td>{{ object.developer }}</td>
+                    <td>{{ object.importance }}</td>
+                    <td>{{ object.time_elapsed }}</td>
+                </tr>
+            </tbody>
+        </table>
+{% endblock %}

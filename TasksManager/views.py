@@ -1,13 +1,22 @@
 from django.shortcuts import render
-from .models import Project, Developer, Supervisor
+from .models import Project, Developer, Supervisor, Task
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import Form_inscription, Form_supervisor, Form_project_create
+from .forms import Form_inscription, Form_supervisor, Form_project_create, Form_task_time
 from django.core.urlresolvers import reverse
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def page(request):
-    all_projects = Project.objects.all()
+    projects_list = Project.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(projects_list, 5)
+    try:
+        all_projects = paginator.page(page)
+    except EmptyPage:
+        all_projects = paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+        all_projects = paginator.page(1)
     return render(request, 'index.html', {'action': "Display all project", 'all_projects': all_projects})
 
 
@@ -17,7 +26,8 @@ def connection_page(request):
 
 def project_detail(request, pk):
     project = Project.objects.get(id=pk)
-    return render(request, 'project_detail.html', {'project': project})
+    tasks = project.tasks.all()
+    return render(request, 'project_detail.html', {'project': project, 'tasks': tasks})
 
 
 def create_developer(request):
@@ -89,15 +99,47 @@ def create_developer2(request):
     return render(request, 'create_developer2.html', {'form': form})
 
 
+class Developer_detail(DetailView):
+    model = Developer
+    template_name = 'developer_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Developer_detail, self).get_context_data(**kwargs)
+        tasks_dev = Task.objects.filter(developer=self.object)
+        context['tasks_dev'] = tasks_dev
+        return context
+
+
+class Task_update_time(UpdateView):
+    model = Task
+    template_name = 'update_task_developer.html'
+    form_class = Form_task_time
+    success_url = 'public_empty'
+
+    def get_success_url(self):
+        return reverse(self.success_url)
+
+def public_empty(request):
+    return HttpResponse("Successful operation!")
+
+
 class Project_list(ListView):
     model = Project
     template_name = 'project_list2.html'
-    paginate_by = 2
+    paginate_by = 3
 
     def get_queryset(self):
         queryset = Project.objects.all().order_by('title')
         return queryset
 
+
+class Task_delete(DeleteView):
+    model = Task
+    template_name = 'confirm_delete_task.html'
+    success_url = 'public_empty'
+
+    def get_success_url(self):
+        return reverse(self.success_url)
 
 def create_supervisor(request):
     if request.POST:

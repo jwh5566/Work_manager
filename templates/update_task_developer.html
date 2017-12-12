@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title_html %}
+    Update Task With Time
+{% endblock %}
+
+{% block h1 %}
+    Update Task With Time
+{% endblock %}
+
+{% block article_content %}
+    {% if form.errors %}
+        {{ form.errors }}
+    {% endif %}
+    <form method="post" action="">
+        {% csrf_token %}
+
+        {% for field in form.visible_fields %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+{% endblock %}

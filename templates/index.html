@@ -24,6 +24,27 @@
         <a href="{% url 'project_list2' %}">Project List(ListView,自定义(带分页))</a></td>
         <td>
             <a href="{% url 'developer_list' %}">Developer List(ListView)</a></td>
+        <td>
+            <a href="{% url 'task_detail' '1' %}">Detail Task(DetailView, pk=1)</a>
+        </td>
+    </tr>
+    </tr>
+        <td>
+        <a href="{% url 'developer_detail' 2 %}">Developer Detail(DeatilView, pk=2)</a></td>
+        <td>
+            <a href="{% url 'update_task' 1 %}">Update Task(UpdateView, pk=1)</a></td>
+        <td>
+            <a href="{% url 'update_task_time' '1' %}">Update Task with Time(DetailView, pk=1)</a>
+        </td>
+    </tr>
+    </tr>
+        <td>
+        <a href="{% url 'task_delete' 1 %}">Delete Task(DeleteView, pk=1)</a></td>
+{#        <td>#}
+{#            <a href="{% url 'update_task' 1 %}">Update Task(UpdateView, pk=1)</a></td>#}
+{#        <td>#}
+{#            <a href="{% url 'update_task_time' '1' %}">Update Task with Time(DetailView, pk=1)</a>#}
+{#        </td>#}
     </tr>
     </tbody>
     </table>
@@ -50,4 +71,27 @@
     {% else %}
         <span>No project.</span>
     {% endif %}
+
+    {% if all_projects.has_other_pages %}
+        <ul class="pagination">
+            {% if all_projects.has_previous %}
+                <li><a href="?page={{ all_projects.previous_page_number }}">&laquo;</a> </li>
+            {% else %}
+                <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in all_projects.paginator.page_range %}
+                {% if all_projects.number == i %}
+                    <li class="active"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a> </li>
+                {% endif %}
+            {% endfor %}
+            {% if all_projects.has_next %}
+                <li><a href="?page={{ all_projects.next_page_number }}">&raquo;</a> </li>
+            {% else %}
+                <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+
 {% endblock %}
