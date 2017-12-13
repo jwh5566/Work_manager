@@ -63,4 +63,7 @@ urlpatterns = [
     # login, logout
     url(r'^connection$', 'TasksManager.views.connection', name='connection'),
     url(r'^disconnect$', 'TasksManager.views.disconnect', name='disconnect'),
+
+    # ajax
+    url(r'^task_delete_ajax$', 'TasksManager.views.task_delete_ajax', name='task_delete_ajax'),
 ]

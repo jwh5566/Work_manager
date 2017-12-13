@@ -1,13 +1,18 @@
 from django.shortcuts import render, redirect
 from .models import Project, Developer, Supervisor, Task
-from django.http import HttpResponse
-from .forms import Form_inscription, Form_supervisor, Form_project_create, Form_task_time, Form_connection
+from django.http import HttpResponse, HttpResponseRedirect
+from .forms import Form_inscription, Form_supervisor, Form_project_create, Form_task_time, Form_connection, \
+    Form_task_delete
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
+import json
+
 
 
 def page(request):
@@ -146,7 +151,7 @@ def Task_detail(request, pk):
     try:
         task = Task.objects.get(id=pk)
     except (Task.DoesNotExist, Task.MultipleObjectsReturned):
-        return HttpResponseRedirect(reverse('public_empty'))
+        return (reverse('public_empty'))
     else:
         request.session['last_task'] = task.id
     return render(request, 'task_detail.html', {'object': task})
@@ -168,6 +173,20 @@ class Task_delete(DeleteView):
 
     def get_success_url(self):
         return reverse(self.success_url)
+
+
+@csrf_exempt
+def task_delete_ajax(request):
+    return_value = 0
+    if len(request.POST) > 0:
+        form = Form_task_delete(request.POST)
+        if form.is_valid():
+            id_task = form.cleaned_data['task']
+            task_record = Task.objects.get(id=id_task)
+            task_record.delete()
+            return_value = id_task
+    return HttpResponse(json.dumps(return_value), content_type="application/json")
+
 
 
 def connection(request):

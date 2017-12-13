@@ -1,7 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title_html %}
     Tasks List
+{% endblock %}
+
+{% block head %}
+    <script src="{% static 'js/task.js' %}"></script>
 {% endblock %}
 
 {% block h1 %}
@@ -27,11 +32,12 @@
                 </tr>
             {% endif %}
             {% for task in tasks_list %}
-                <tr>
+                <tr id="task_{{ task.id }}">
                     <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
                     <td>{{ task.description }}</td>
                     <td><a href="{% url 'update_task' task.id %}"><button class="btn btn-info">Edit</button></a>
                         <a href="{% url 'task_delete' task.id %}"><button class="btn btn-danger">Delete</button></a></td>
+                    <td><button class="btn btn-primary" onclick="javascript: task_delete({{ task.id }}, '{% url "task_delete_ajax" %}');">Delete(Ajax)</button></td>
                 </tr>
             {% endfor %}
             </tbody>

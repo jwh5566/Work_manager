@@ -14,6 +14,10 @@ class Form_task_time(forms.ModelForm):
         fields = ['time_elapsed']
 
 
+class Form_task_delete(forms.Form):
+    task = forms.IntegerField()
+
+
 class Form_project_create(forms.Form):
     title = forms.CharField(label="Title", max_length=30)
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 100}))
@@ -22,9 +26,9 @@ class Form_project_create(forms.Form):
 
 class Form_inscription(forms.Form):
     name = forms.CharField(label="Name", max_length=30, error_messages=error_name)
-    login = forms.CharField(label="Login", max_length=30)
+    login = forms.CharField(label="Login", max_length=30, help_text="Letters, digits and @/./+/-/_ only.")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
-    password_bis = forms.CharField(label="password", widget=forms.PasswordInput)
+    password_bis = forms.CharField(label="password", widget=forms.PasswordInput, help_text="Enter the same password as before, for verification.")
     supervisor = forms.ModelChoiceField(label="Supervisor",
                                         queryset=Supervisor.objects.all())
     
